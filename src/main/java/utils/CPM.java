@@ -22,9 +22,9 @@ public class CPM {
     }
 
     public static void calculateTarget(Particle particle) {
-        if(particle.getPosition().getLeft() >= TARGET.getLeft() && particle.getPosition().getLeft() <= TARGET.getRight())
+        if (particle.getPosition().getLeft() >= TARGET.getLeft() && particle.getPosition().getLeft() <= TARGET.getRight())
             particle.setTarget(new Tuple(particle.getPosition().getLeft(), 0));
-        else if(particle.getPosition().getLeft() < TARGET.getLeft())
+        else if (particle.getPosition().getLeft() < TARGET.getLeft())
             particle.setTarget(new Tuple(TARGET.getLeft(), 0));
         else
             particle.setTarget(new Tuple(TARGET.getRight(), 0));
@@ -33,11 +33,11 @@ public class CPM {
         );
     }
 
-    public static void calculateVelocity(Particle particle, List<Particle> collisions) {
-        if(collisions.isEmpty())
+    public static void calculateVelocity(Particle particle) {
+        if(particle.getCollisions().isEmpty())
             calculateVd(particle);
         else
-            calculateVe(particle, collisions);
+            calculateVe(particle);
     }
 
     private static void calculateVd(Particle particle) {
@@ -54,8 +54,8 @@ public class CPM {
         return dif.divide(dif.norm());
     }
 
-    private static void calculateVe(Particle particle, List<Particle> collisions) {
-         Tuple sum = collisions
+    private static void calculateVe(Particle particle) {
+         Tuple sum = particle.getCollisions()
                  .stream()
                  .map(particle1 -> e(particle, particle1))
                  .reduce(new Tuple(0, 0), Tuple::add);
@@ -73,6 +73,10 @@ public class CPM {
 
     public static void resetR(Particle particle) {
         particle.setR(R_MIN);
+    }
+
+    public static double updateTime(double time) {
+        return time + DELTA_T;
     }
 
 
