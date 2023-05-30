@@ -14,6 +14,7 @@ public class CPM {
     private static final double DELTA_R = R_MAX / (TAU / DELTA_T);
 
     public static final Tuple TARGET = new Tuple(9.5, 10.5);
+    public static final Tuple TARGET_OUTSIDE = new Tuple(8.5, 11.5);
 
     private static void newVd(Particle particle) {
         particle.setV(
@@ -28,17 +29,16 @@ public class CPM {
             particle.setTarget(new Tuple(TARGET.getLeft(), 0));
         else
             particle.setTarget(new Tuple(TARGET.getRight(), 0));
-        if (particle.getPosition().getLeft() != particle.getTarget().getLeft()) {
-            particle.setAngle(
-                    Math.atan(Math.abs(particle.getPosition().getLeft() - particle.getTarget().getLeft()) / particle.getPosition().getRight())
-            );
-            if (particle.getPosition().getLeft() < TARGET.getLeft()) {
-                particle.setAngle(Math.PI - particle.getAngle());
-            }
-            else if (particle.getPosition().getLeft() > TARGET.getRight()) {
-                particle.setAngle(Math.PI + particle.getAngle());
-            }
-        }
+        calculateAngle(particle);
+    }
+
+    public static void calculateTargetOutside(Particle particle) {
+        if (particle.getPosition().getLeft() >= TARGET_OUTSIDE.getLeft() && particle.getPosition().getLeft() <= TARGET_OUTSIDE.getRight())
+            particle.setTarget(new Tuple(particle.getPosition().getLeft(), -10));
+        else if (particle.getPosition().getLeft() < TARGET_OUTSIDE.getLeft())
+            particle.setTarget(new Tuple(TARGET_OUTSIDE.getLeft(), -10));
+        else
+            particle.setTarget(new Tuple(TARGET_OUTSIDE.getRight(), -10));
     }
 
     public static void calculateVelocity(Particle particle) {
@@ -73,12 +73,46 @@ public class CPM {
     }
 
     public static void calculatePosition(Particle particle) {
-        particle.setPosition(particle.getPosition().add(particle.getVelocity().multiply(DELTA_T)));
+        particle.setPosition(
+                particle.getPosition().add(particle.getVelocity().multiply(DELTA_T))
+        );
+        if (particle.getPosition().getRight() < 0) {
+            particle.setOutside(true);
+            calculateTargetOutside(particle);
+        }
     }
 
     public static void updateR(Particle particle) {
         if (particle.getR() < R_MAX) {
             particle.setR(particle.getR() + DELTA_R);
+        }
+    }
+
+    public static void calculateAngle(Particle particle) {
+        if (particle.isOutside()) {
+            if (particle.getPosition().getLeft() != particle.getTarget().getLeft()) {
+                particle.setAngle(
+                        Math.atan(Math.abs(particle.getPosition().getLeft() - particle.getTarget().getLeft()) / 10)
+                );
+                if (particle.getPosition().getLeft() < TARGET_OUTSIDE.getLeft()) {
+                    particle.setAngle(Math.PI - particle.getAngle());
+                }
+                else if (particle.getPosition().getLeft() > TARGET_OUTSIDE.getRight()) {
+                    particle.setAngle(Math.PI + particle.getAngle());
+                }
+            }
+        } else {
+            if (particle.getPosition().getLeft() != particle.getTarget().getLeft()) {
+                particle.setAngle(
+                        Math.atan(Math.abs(particle.getPosition().getLeft() - particle.getTarget().getLeft()) / particle.getPosition().getRight())
+                );
+                if (particle.getPosition().getLeft() < TARGET.getLeft()) {
+                    particle.setAngle(Math.PI - particle.getAngle());
+                }
+                else if (particle.getPosition().getLeft() > TARGET.getRight()) {
+                    particle.setAngle(Math.PI + particle.getAngle());
+                }
+            }
         }
     }
 

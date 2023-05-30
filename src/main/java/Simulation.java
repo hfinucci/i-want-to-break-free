@@ -30,16 +30,18 @@ public class Simulation {
                         }
                     }
                     firstParticle.setCollisions(collisions);
-                    if (collisions.isEmpty()) {
-                        CPM.updateR(firstParticle);
+                }
+                for (Particle particle : particlesList) {
+                    if (particle.getCollisions().isEmpty()) {
+                        CPM.updateR(particle);
                     } else {
-                        CPM.resetR(firstParticle);
+                        CPM.resetR(particle);
                     }
                 }
                 for (Particle particle : particlesList) {
                     CPM.calculateVelocity(particle);
                     CPM.calculatePosition(particle);
-                    CPM.calculateTarget(particle);
+                    CPM.calculateAngle(particle);
                 }
                 time = CPM.updateTime(time);
             }

@@ -16,6 +16,7 @@ public class Particle {
     private double r;
     private Tuple target;
     private double angle;
+    private boolean outside = false;
 
     private List<Particle> collisions =new ArrayList<>();
 
@@ -93,5 +94,13 @@ public class Particle {
 
     public boolean isColliding(Particle other) {
         return this.getPosition().subtract(other.getPosition()).norm() <= this.getR() + other.getR();
+    }
+
+    public boolean isOutside() {
+        return outside;
+    }
+
+    public void setOutside(boolean outside) {
+        this.outside = outside;
     }
 }
