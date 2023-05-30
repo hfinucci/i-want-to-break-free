@@ -15,7 +15,7 @@ public class CPM {
 
     public static final Tuple TARGET = new Tuple(9.5, 10.5);
 
-    public static void newVd(Particle particle) {
+    private static void newVd(Particle particle) {
         particle.setV(
                 MAX_VD * Math.pow((particle.getR() - R_MIN) / (R_MAX - R_MIN), BETA)
         );
@@ -28,9 +28,17 @@ public class CPM {
             particle.setTarget(new Tuple(TARGET.getLeft(), 0));
         else
             particle.setTarget(new Tuple(TARGET.getRight(), 0));
-        particle.setAngle(
-                1 / Math.tan(Math.abs(particle.getPosition().getLeft() - particle.getTarget().getLeft()) / particle.getPosition().getRight())
-        );
+        if (particle.getPosition().getLeft() != particle.getTarget().getLeft()) {
+            particle.setAngle(
+                    Math.atan(Math.abs(particle.getPosition().getLeft() - particle.getTarget().getLeft()) / particle.getPosition().getRight())
+            );
+            if (particle.getPosition().getLeft() < TARGET.getLeft()) {
+                particle.setAngle(Math.PI - particle.getAngle());
+            }
+            else if (particle.getPosition().getLeft() > TARGET.getRight()) {
+                particle.setAngle(Math.PI + particle.getAngle());
+            }
+        }
     }
 
     public static void calculateVelocity(Particle particle) {
@@ -41,6 +49,7 @@ public class CPM {
     }
 
     private static void calculateVd(Particle particle) {
+        newVd(particle);
         particle.setVelocity(new Tuple(
                 particle.getV() * Math.sin(particle.getAngle()),
                 particle.getV() * Math.cos(particle.getAngle())
@@ -68,7 +77,9 @@ public class CPM {
     }
 
     public static void updateR(Particle particle) {
-        particle.setR(particle.getR() + DELTA_R);
+        if (particle.getR() < R_MAX) {
+            particle.setR(particle.getR() + DELTA_R);
+        }
     }
 
     public static void resetR(Particle particle) {

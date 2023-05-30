@@ -25,9 +25,8 @@ def export_to_ovito(frame_file):
 
     pipeline.modifiers.append(simulation_cell)
 
-    export_file(pipeline, 'results_ovito46_2.dump', 'lammps/dump',
-                columns=["Particle Identifier", "Position.X", "Position.Y", "Position.Z", "Radius", "Color.R",
-                         "Color.G", "Color.B"],
+    export_file(pipeline, 'results_ovito1_1.dump', 'lammps/dump',
+                columns=["Particle Identifier", "Position.X", "Position.Y", "Position.Z", "Radius"],
                 multiple_frames=True, start_frame=0, end_frame=len(data_frame) - 1)
 
 
@@ -111,7 +110,7 @@ def get_particles(data_frame, color_dictionary: dict):
     particles.create_property('Particle Identifier', data=data_frame.id)
     particles.create_property("Position", data=np.array((data_frame.x, data_frame.y, data_frame.z)).T)
     particles.create_property('Radius', data=data_frame.radius)
-    particles.create_property('Color', data=np.array(color_dictionary[color_offset]))
+    # particles.create_property('Color', data=np.array(color_dictionary[color_offset]))
     color_offset += 1
     return particles
 

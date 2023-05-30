@@ -19,7 +19,7 @@ public class Simulation {
 
             double time = 0;
 
-            while (time < 10) {
+            while (time < 1000) {
                 printWriter.println(printParticle(particlesList, time));
                 for (Particle firstParticle : particlesList) {
                     List<Particle> collisions = new ArrayList<>();
@@ -39,6 +39,7 @@ public class Simulation {
                 for (Particle particle : particlesList) {
                     CPM.calculateVelocity(particle);
                     CPM.calculatePosition(particle);
+                    CPM.calculateTarget(particle);
                 }
                 time = CPM.updateTime(time);
             }
@@ -65,7 +66,7 @@ public class Simulation {
                     particle.getVelocity().getLeft() + "\t" +
                     particle.getVelocity().getLeft() + "\t" +
                     particle.getR() + "\t" +
-                    "0.0\t";
+                    particle.getAngle() + "\t";
             sb.append(sb_line).append("\n");
         }
         sb.append("\n");

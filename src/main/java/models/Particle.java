@@ -21,6 +21,7 @@ public class Particle {
 
     public Particle(double x, double y) {
         this.id = global_id++;
+        this.angle = Math.PI;
         this.position = new Tuple(x, y);
         CPM.calculateTarget(this);
         CPM.resetR(this);
