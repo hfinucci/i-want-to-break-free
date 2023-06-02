@@ -59,7 +59,14 @@ public class CPM {
     private static Tuple e(Particle particle, Particle other) {
         Tuple dif = new Tuple(
                 particle.getPosition().getLeft() - other.getPosition().getLeft(),
-                particle.getPosition().getLeft() - other.getPosition().getRight());
+                particle.getPosition().getRight() - other.getPosition().getRight());
+        return dif.divide(dif.norm());
+    }
+
+    private static Tuple eWithWall(Particle particle, Tuple wall) {
+        Tuple dif = new Tuple(
+                particle.getPosition().getLeft() - wall.getLeft(),
+                particle.getPosition().getRight() - wall.getRight());
         return dif.divide(dif.norm());
     }
 
@@ -68,6 +75,10 @@ public class CPM {
                  .stream()
                  .map(particle1 -> e(particle, particle1))
                  .reduce(new Tuple(0, 0), Tuple::add);
+         sum.add(particle.getCollisionsWall()
+                 .stream()
+                 .map(tuple -> eWithWall(particle, tuple))
+                 .reduce(new Tuple(0, 0), Tuple::add));
          Tuple res = sum.divide(sum.norm()).multiply(MAX_VD);
          particle.setVelocity(res);
     }

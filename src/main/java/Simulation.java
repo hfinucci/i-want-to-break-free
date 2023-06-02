@@ -29,6 +29,7 @@ public class Simulation {
                             collisions.add(secondParticle);
                         }
                     }
+                    firstParticle.addWallCollisions();
                     firstParticle.setCollisions(collisions);
                 }
                 for (Particle particle : particlesList) {

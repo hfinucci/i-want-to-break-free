@@ -18,7 +18,8 @@ public class Particle {
     private double angle;
     private boolean outside = false;
 
-    private List<Particle> collisions =new ArrayList<>();
+    private List<Particle> collisions = new ArrayList<>();
+    private List<Tuple> collisionsWall = new ArrayList<>();
 
     public Particle(double x, double y) {
         this.id = global_id++;
@@ -92,8 +93,28 @@ public class Particle {
         this.collisions = collisions;
     }
 
+    public List<Tuple> getCollisionsWall() {
+        return collisionsWall;
+    }
+
+    public void setCollisionsWall(List<Tuple> collisionsWall) {
+        this.collisionsWall = collisionsWall;
+    }
+
     public boolean isColliding(Particle other) {
         return this.getPosition().subtract(other.getPosition()).norm() <= this.getR() + other.getR();
+    }
+
+    public void addWallCollisions() {
+        collisionsWall = new ArrayList<>();
+        if(getPosition().getLeft() + getR() > 20)
+            collisionsWall.add(new Tuple(20, getPosition().getRight()));
+        else if(getPosition().getLeft() - getR() < 0)
+            collisionsWall.add(new Tuple(0, getPosition().getRight()));
+        else if(getPosition().getRight() + getR() > 20)
+            collisionsWall.add(new Tuple(getPosition().getLeft(), 20));
+        else if(getPosition().getRight() - getR() < 0)
+            collisionsWall.add(new Tuple(getPosition().getLeft(), 0));
     }
 
     public boolean isOutside() {
