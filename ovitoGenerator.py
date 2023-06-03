@@ -15,9 +15,9 @@ def export_to_ovito(frame_file):
 
     def simulation_cell(frame, data):
         cell = SimulationCell()
-        cell[:, 0] = (224, 0, 0)  # va el L donde estan los 7s
-        cell[:, 1] = (0, 112, 0)
-        cell[:, 2] = (0, 0, 56)
+        cell[:, 0] = (20, 0, 0)  # va el L donde estan los 7s
+        cell[:, 1] = (0, 20, 0)
+        cell[:, 2] = (0, 0, 0)
         data.objects.append(cell)
 
         particles = get_particles(data_frame[frame], color_dictionary)
@@ -59,7 +59,7 @@ def id_to_color(ball_id: int) -> tuple:
         return 255, 255, 255
     if 16 <= ball_id <= 21:
         return 0, 0, 0
-    to_return = map(normalize_tuple_for_ovito, ball_color_arr[ball_id])
+    to_return = map(normalize_tuple_for_ovito, ball_color_arr[ball_id % 16])
     return tuple(to_return)
 
 

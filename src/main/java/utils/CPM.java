@@ -1,8 +1,10 @@
 package utils;
 
 import models.Particle;
+import org.apache.commons.math3.distribution.UniformRealDistribution;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CPM {
     private static final double R_MIN = 0.1;
@@ -25,10 +27,10 @@ public class CPM {
     public static void calculateTarget(Particle particle) {
         if (particle.getPosition().getLeft() >= TARGET.getLeft() && particle.getPosition().getLeft() <= TARGET.getRight())
             particle.setTarget(new Tuple(particle.getPosition().getLeft(), 0));
-        else if (particle.getPosition().getLeft() < TARGET.getLeft())
-            particle.setTarget(new Tuple(TARGET.getLeft(), 0));
-        else
-            particle.setTarget(new Tuple(TARGET.getRight(), 0));
+        else {
+            UniformRealDistribution urd = new UniformRealDistribution(TARGET.getLeft(), TARGET.getRight());
+            particle.setTarget(new Tuple(urd.sample(), 0));
+        }
         calculateAngle(particle);
     }
 
@@ -42,7 +44,7 @@ public class CPM {
     }
 
     public static void calculateVelocity(Particle particle) {
-        if(particle.getCollisions().isEmpty())
+        if(particle.getCollisions().isEmpty() && particle.getCollisionsWall().isEmpty())
             calculateVd(particle);
         else
             calculateVe(particle);
@@ -60,6 +62,7 @@ public class CPM {
         Tuple dif = new Tuple(
                 particle.getPosition().getLeft() - other.getPosition().getLeft(),
                 particle.getPosition().getRight() - other.getPosition().getRight());
+        calculateTarget(particle);
         return dif.divide(dif.norm());
     }
 
@@ -75,10 +78,11 @@ public class CPM {
                  .stream()
                  .map(particle1 -> e(particle, particle1))
                  .reduce(new Tuple(0, 0), Tuple::add);
-         sum.add(particle.getCollisionsWall()
+         Tuple wall = particle.getCollisionsWall()
                  .stream()
                  .map(tuple -> eWithWall(particle, tuple))
-                 .reduce(new Tuple(0, 0), Tuple::add));
+                 .reduce(new Tuple(0, 0), Tuple::add);
+         sum = sum.add(wall);
          Tuple res = sum.divide(sum.norm()).multiply(MAX_VD);
          particle.setVelocity(res);
     }
@@ -112,6 +116,8 @@ public class CPM {
                     particle.setAngle(Math.PI + particle.getAngle());
                 }
             }
+            else
+                particle.setAngle(Math.PI);
         } else {
             if (particle.getPosition().getLeft() != particle.getTarget().getLeft()) {
                 particle.setAngle(
@@ -123,8 +129,13 @@ public class CPM {
                 else if (particle.getPosition().getLeft() > TARGET.getRight()) {
                     particle.setAngle(Math.PI + particle.getAngle());
                 }
-            }
+            } else
+                particle.setAngle(Math.PI);
         }
+    }
+
+    public static List<Particle> deleteParticles(List<Particle> particles) {
+        return particles.stream().filter(particle -> particle.getPosition().getRight() + getRMin() > -10).collect(Collectors.toList());
     }
 
     public static void resetR(Particle particle) {
@@ -133,6 +144,10 @@ public class CPM {
 
     public static double updateTime(double time) {
         return time + DELTA_T;
+    }
+
+    public static double getRMin() {
+        return R_MIN;
     }
 
 
