@@ -14,7 +14,7 @@ public class Simulation {
         ParticleGenerator.initParticles(particlesList);
 
         try {
-            FileWriter myWriter = new FileWriter("src/main/resources/states1.txt");
+            FileWriter myWriter = new FileWriter("src/main/resources/c/states" + CPM.getD() + "_" + ParticleGenerator.getCount() + "_3.txt");
             PrintWriter printWriter = new PrintWriter(myWriter);
 
             double time = 0;
@@ -33,7 +33,7 @@ public class Simulation {
                     firstParticle.setCollisions(collisions);
                 }
                 for (Particle particle : particlesList) {
-                    if (particle.getCollisions().isEmpty()) {
+                    if (particle.getCollisions().isEmpty() && particle.getCollisionsWall().isEmpty()) {
                         CPM.updateR(particle);
                     } else {
                         CPM.resetR(particle);
@@ -68,11 +68,10 @@ public class Simulation {
                     particle.getPosition().getRight() + "\t" +
                     particle.getTarget().getRight() + "\t" +
                     particle.getTarget().getLeft() + "\t" +
-                    CPM.getRMin() + "\t" +
+                    particle.getR() + "\t" +
                     particle.getVelocity().getRight() + "\t";
             sb.append(sb_line).append("\n");
         }
-        sb.append("\n");
 
         return sb.toString();
     }

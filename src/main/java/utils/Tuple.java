@@ -51,9 +51,6 @@ public class Tuple {
         return Math.sqrt(left * left + right * right);
     }
 
-    public Tuple versor(Tuple t) {
-        return this.subtract(t).divide(this.subtract(t).norm());
-    }
 
     @Override
     public boolean equals(Object o) {

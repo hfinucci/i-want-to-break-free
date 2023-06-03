@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ParticleGenerator {
 
-    private static final int COUNT = 200;
+    private static final int COUNT = 380;
     private static final int SIZE = 20;
 
     public static void initParticles(List<Particle> particleList) {
@@ -22,5 +22,9 @@ public class ParticleGenerator {
                 particleList.add(new Particle(pos.getLeft(), pos.getRight()));
             }
         }
+    }
+
+    public static int getCount() {
+        return COUNT;
     }
 }

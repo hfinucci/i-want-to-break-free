@@ -9,13 +9,14 @@ import java.util.stream.Collectors;
 public class CPM {
     private static final double R_MIN = 0.1;
     private static final double R_MAX = 0.37;
-    private static final double MAX_VD = 0.95;
+    private static final double MAX_VD = 2.0;
     private static final double BETA = 0.9;
     private static final double TAU = 0.5;
+    private static final double D = 3.0;
     public static final double DELTA_T = R_MIN / (2 * MAX_VD);
     private static final double DELTA_R = R_MAX / (TAU / DELTA_T);
 
-    public static final Tuple TARGET = new Tuple(9.5, 10.5);
+    public static final Tuple TARGET = new Tuple(10.0 - (D - 0.2)/2, 10 + (D - 0.2)/2);
     public static final Tuple TARGET_OUTSIDE = new Tuple(8.5, 11.5);
 
     private static void newVd(Particle particle) {
@@ -150,5 +151,11 @@ public class CPM {
         return R_MIN;
     }
 
+    public static double getD() {
+        return D;
+    }
 
+    public static Tuple getTarget() {
+        return TARGET;
+    }
 }
