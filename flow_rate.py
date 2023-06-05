@@ -11,7 +11,7 @@ with open("src/main/resources/c/states1.2_200_1.txt", "r") as frame:
                   if (num > possible_values and num < 5 + possible_values):
                         if flow_rate_dict.get(possible_values) is None:
                               flow_rate_dict[possible_values] = 0
-                        flow_rate_dict[possible_values] += 1
+                        flow_rate_dict[possible_values] += 1/5
 frame.close()
 
 print(flow_rate_dict)
