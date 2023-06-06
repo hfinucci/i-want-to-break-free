@@ -40,11 +40,10 @@ error1 = data1.std()
 
 
 fig, ax = plt.subplots()
-ax.errorbar(data1.mean(axis=0),list(range(1,201)), xerr=error1, fmt='.', label="D=1.2", linewidth=2, capsize=6, color= "#194747")
-plt.ylabel("Partícula")
+ax.errorbar(list(range(1,201)), data1.mean(axis=0), yerr=error1, fmt='.', linewidth=2, capsize=6, color= "#194747")
+plt.xlabel("Cantidad de partículas salientes")
 mpl.rcParams['savefig.transparent'] = True
-plt.xlabel("Tiempo de salida (s)")
-plt.legend()
+plt.ylabel("Tiempo de salida (s)")
 plt.show()
 
       

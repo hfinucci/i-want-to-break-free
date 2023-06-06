@@ -65,21 +65,17 @@ for file_index in range(1,4):
 data4 = pd.DataFrame(flow_rate_array)
 error4 = data4.std()
 
-# fig, ax = plt.subplots()
-# ax.errorbar(data1.mean(axis=0),list(range(1,201)), xerr=error1, fmt='.', label="D=1.2", linewidth=2, capsize=6, color= "#194747")
-# ax.errorbar(data2.mean(axis=0),list(range(1,261)), xerr=error2, fmt='.', label="D=1.8",linewidth=2, capsize=6, color= "#6d3210")
-# ax.errorbar(data3.mean(axis=0),list(range(1,321)), xerr=error3, fmt='.', label="D=2.4",linewidth=2, capsize=6, color= "#7cc8da")
-# ax.errorbar(data4.mean(axis=0),list(range(1,381)), xerr=error4, fmt='.', label="D=3.0",linewidth=2, capsize=6, color= "#c3ae7f")
-# mpl.rcParams['savefig.transparent'] = True
-# ax.errorbar(data1.mean(axis=0),list(range(1,201)), fmt='.', label="D=1.2 - N=200", linewidth=2, capsize=6, color= "red")
-# ax.errorbar(data2.mean(axis=0),list(range(1,261)), fmt='.', label="D=1.8 - N=260",linewidth=2, capsize=6, color= "blue")
-# ax.errorbar(data3.mean(axis=0),list(range(1,321)), fmt='.', label="D=2.4 - N=320",linewidth=2, capsize=6, color= "yellow")
-# ax.errorbar(data4.mean(axis=0),list(range(1,381)), fmt='.', label="D=3.0 - N=380",linewidth=2, capsize=6, color= "green")
-# plt.ylabel("Partícula")
+fig, ax = plt.subplots()
+ax.errorbar(data1.mean(axis=0),list(range(1,201)), xerr=error1, fmt='.', label="d=1.2", linewidth=2, capsize=6, color= "#194747")
+ax.errorbar(data2.mean(axis=0),list(range(1,261)), xerr=error2, fmt='.', label="d=1.8",linewidth=2, capsize=6, color= "#6d3210")
+ax.errorbar(data3.mean(axis=0),list(range(1,321)), xerr=error3, fmt='.', label="d=2.4",linewidth=2, capsize=6, color= "#7cc8da")
+ax.errorbar(data4.mean(axis=0),list(range(1,381)), xerr=error4, fmt='.', label="d=3.0",linewidth=2, capsize=6, color= "#c3ae7f")
+mpl.rcParams['savefig.transparent'] = True
+plt.ylabel("Cantidad de partículas salientes")
 
-# plt.xlabel("Tiempo de salida (s)")
-# plt.legend()
-# plt.show()
+plt.xlabel("Tiempo de salida (s)")
+plt.legend()
+plt.show()
 
 ################################  Beyond the spider verse ################################
 
@@ -117,16 +113,16 @@ for num in data4.mean(axis=0):
                 flow_rate_dict4[possible_values] += 1/5
 
 
-# fig, ax = plt.subplots()
-# ax.errorbar(list(flow_rate_dict),list(flow_rate_dict.values()), fmt='.', label="D=1.2", linewidth=2, capsize=6, color= "#194747")
-# ax.errorbar(list(flow_rate_dict2),list(flow_rate_dict2.values()), fmt='.', label="D=1.8", linewidth=2, capsize=6, color= "#6d3210")
-# ax.errorbar(list(flow_rate_dict3),list(flow_rate_dict3.values()), fmt='.', label="D=2.4", linewidth=2, capsize=6, color= "#7cc8da")
-# ax.errorbar(list(flow_rate_dict4),list(flow_rate_dict4.values()), fmt='.', label="D=3.0", linewidth=2, capsize=6, color= "#c3ae7f")
-# plt.ylabel("Q (1/m/s)")
-# plt.xlabel("Tiempo (s)")
-# plt.legend()
-# mpl.rcParams['savefig.transparent'] = True
-# plt.show()
+fig, ax = plt.subplots()
+ax.errorbar(list(flow_rate_dict),list(flow_rate_dict.values()), fmt='.', label="d=1.2", linewidth=2, capsize=6, color= "#194747")
+ax.errorbar(list(flow_rate_dict2),list(flow_rate_dict2.values()), fmt='.', label="d=1.8", linewidth=2, capsize=6, color= "#6d3210")
+ax.errorbar(list(flow_rate_dict3),list(flow_rate_dict3.values()), fmt='.', label="d=2.4", linewidth=2, capsize=6, color= "#7cc8da")
+ax.errorbar(list(flow_rate_dict4),list(flow_rate_dict4.values()), fmt='.', label="d=3.0", linewidth=2, capsize=6, color= "#c3ae7f")
+plt.ylabel("Q (1/m/s)")
+plt.xlabel("Tiempo (s)")
+plt.legend()
+mpl.rcParams['savefig.transparent'] = True
+plt.show()
 
 
 flow_rate_dict = {k: v for k, v in flow_rate_dict.items() if k >= 15 and k <= 40}
@@ -142,18 +138,18 @@ arr4 = np.array(list(flow_rate_dict4.values()))
 
 
 fig, ax = plt.subplots()
-# ax.errorbar(x=[1.2,1.8,2.4,3.0],y=[arr1.mean(), arr2.mean(), arr3.mean(), arr4.mean()], yerr=[arr1.std(), arr2.std(), arr3.std(), arr4.std()], fmt='.', linewidth=2, capsize=6, color= "#7cc8da")
-# plt.ylabel("Q (1/m/s)")
-# plt.xlabel("Ancho de la puerta (m)")
-# mpl.rcParams['savefig.transparent'] = True
-# plt.show()
+ax.errorbar(x=[1.2,1.8,2.4,3.0],y=[arr1.mean(), arr2.mean(), arr3.mean(), arr4.mean()], yerr=[arr1.std(), arr2.std(), arr3.std(), arr4.std()], fmt='.', linewidth=2, capsize=6, color= "#7cc8da")
+plt.ylabel("Q (1/m/s)")
+plt.xlabel("Ancho de la puerta (m)")
+mpl.rcParams['savefig.transparent'] = True
+plt.show()
 
 x = np.array([1.2,1.8,2.4,3.0]).reshape((-1, 1))
 y = np.array([arr1.mean(), arr2.mean(), arr3.mean(), arr4.mean()])
 
 reg = LinearRegression().fit(x,y)
 
-# plt.scatter(x, y,color='g')
+plt.scatter(x, y,color='g')
 plt.plot(x, reg.predict(x), color='#c3ae7f', label="Regresión Lineal")
 ax.errorbar(x=[1.2,1.8,2.4,3.0],y=[arr1.mean(), arr2.mean(), arr3.mean(), arr4.mean()], yerr=[arr1.std(), arr2.std(), arr3.std(), arr4.std()], fmt='.', linewidth=2, capsize=6, color= "#7cc8da")
 plt.ylabel("Q (1/m/s)")
