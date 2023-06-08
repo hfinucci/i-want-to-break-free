@@ -38,10 +38,11 @@ public class CPM {
     public static void calculateTargetOutside(Particle particle) {
         if (particle.getPosition().getLeft() >= TARGET_OUTSIDE.getLeft() && particle.getPosition().getLeft() <= TARGET_OUTSIDE.getRight())
             particle.setTarget(new Tuple(particle.getPosition().getLeft(), -10));
-        else if (particle.getPosition().getLeft() < TARGET_OUTSIDE.getLeft())
-            particle.setTarget(new Tuple(TARGET_OUTSIDE.getLeft(), -10));
-        else
-            particle.setTarget(new Tuple(TARGET_OUTSIDE.getRight(), -10));
+        else {
+            UniformRealDistribution urd = new UniformRealDistribution(TARGET_OUTSIDE.getLeft(), TARGET_OUTSIDE.getRight());
+            particle.setTarget(new Tuple(urd.sample(), -10));
+        }
+        calculateAngle(particle);
     }
 
     public static void calculateVelocity(Particle particle) {
@@ -92,7 +93,7 @@ public class CPM {
         particle.setPosition(
                 particle.getPosition().add(particle.getVelocity().multiply(DELTA_T))
         );
-        if (particle.getPosition().getRight() < 0) {
+        if (!particle.isOutside() && particle.getPosition().getRight() < 0) {
             particle.setOutside(true);
             calculateTargetOutside(particle);
         }

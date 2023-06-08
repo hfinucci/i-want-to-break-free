@@ -14,7 +14,7 @@ public class Simulation {
         ParticleGenerator.initParticles(particlesList);
 
         try {
-            FileWriter myWriter = new FileWriter("src/main/resources/c/states" + CPM.getD() + "_" + ParticleGenerator.getCount() + "_3.txt");
+            FileWriter myWriter = new FileWriter("src/main/resources/states" + CPM.getD() + "_" + ParticleGenerator.getCount() + ".txt");
             PrintWriter printWriter = new PrintWriter(myWriter);
 
             double time = 0;

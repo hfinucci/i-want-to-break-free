@@ -113,7 +113,7 @@ public class Particle {
             collisionsWall.add(new Tuple(0, getPosition().getRight()));
         else if(getPosition().getRight() + getR() > 20)
             collisionsWall.add(new Tuple(getPosition().getLeft(), 20));
-        else if(getPosition().getRight() - getR() < 0 && (getPosition().getLeft() > CPM.getTarget().getRight() || getPosition().getLeft() < CPM.getTarget().getLeft()))
+        else if(!isOutside() && getPosition().getRight() - getR() < 0 && (getPosition().getLeft() > CPM.getTarget().getRight() || getPosition().getLeft() < CPM.getTarget().getLeft()))
             collisionsWall.add(new Tuple(getPosition().getLeft(), 0));
     }
 
